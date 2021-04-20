@@ -1,0 +1,88 @@
+https://binarysearch.com/problems/Sum-of-the-Deepest-Nodes
+
+Sum of the Deepest Nodes
+
+
+Sum of the Deepest Nodes
+Question 64 of 866
+Given a binary tree root, find the sum of the deepest node values.
+
+Constraints
+
+n ≤ 100,000 where n is the number of nodes in root
+Example 1
+Input
+Visualize Tree
+
+
+Output
+6
+Explanation
+Since values 4 and 2 are deepest.
+
+Example 2
+Input
+Visualize Tree
+
+Output
+3
+Explanation
+Since 3 is deepest.
+
+
+
+
+int findLevel(Tree* root) {
+    if (root == NULL) {
+        return 0;
+    }
+
+    return 1 + max(findLevel(root->left), findLevel(root->right));
+}
+
+void findDeepestSum(Tree* root, int max, int level, int& sum) {
+    if (root == NULL) {
+        return;
+    }
+
+    if (root->left == NULL && root->right == NULL && level == max) {
+        sum += root->val;
+        return;
+    }
+
+    findDeepestSum(root->left, max, level + 1, sum);
+    findDeepestSum(root->right, max, level + 1, sum);
+}
+
+int solve(Tree* root) {
+    if (root == NULL) {
+        return 0;
+    }
+
+    if (root->left == NULL && root->right == NULL) {
+        return root->val;
+    }
+
+    int level = findLevel(root);
+
+    int sum = 0;
+    findDeepestSum(root, level - 1, 0, sum);
+    return sum;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

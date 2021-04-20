@@ -1,0 +1,22 @@
+
+
+how to use bit manipulation to solve problems easily and efficiently
+
+
+https://leetcode.com/problems/sum-of-two-integers/discuss/84278/A-summary%3A-how-to-use-bit-manipulation-to-solve-problems-easily-and-efficiently
+
+
+
+
+Count the number of ones in the binary representation of the given number
+
+int count_one(int n) {
+    while(n) {
+        n = n&(n-1);
+        count++;
+    }
+    return count;
+}
+
+
+

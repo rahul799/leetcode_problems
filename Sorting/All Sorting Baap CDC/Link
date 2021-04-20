@@ -1,0 +1,158 @@
+https://leetcode.com/discuss/general-discussion/1091763/must-do-all-required-sorting-algorithms-complete-guide
+
+
+
+
+
+
+12. Heap Sort: It is a comparison based sorting technique based on Binary Heap data structure.
+
+int arr[10]= {0,1,3,17,2,30,7,25,19}
+void heap_sort(int idx){
+	int left=2*idx;
+	int right=2*idx+1;
+	int min_idx=idx;
+	int last=arr.size()-1;
+	if(left <= last && compare(arr[left],arr[idx])
+		min_idx=left;
+	if(right <= last && compare(arr[right],arr[idx])
+		min_idx=right;
+	if(min_idx!=idx){
+		swap(arr[idx],arr[min_idx]);
+		heap_sort(min_idx);
+	}
+	
+bool compare(int a,int b){
+	if(minHeap)
+		return a<b;
+	else
+		return a>b;
+}	
+
+
+
+
+
+
+
+
+10. Counting Sort: It is a sorting technique based on keys between a specific range.
+
+
+
+
+void count_sort(int arr[],int n){
+    int output[n];
+    int count[10];
+    memset(count, 0, sizeof(count));
+    for (i = 0;i<n;i++)
+        ++count[arr[i]];
+    for (i = 1; i<10;i++)
+        count[i] += count[i - 1];
+    for (i = 0;i<n; ++i) {
+        output[count[arr[i]] - 1] = arr[i];
+        --count[arr[i]];
+    }
+}	
+
+
+
+
+
+
+
+
+5. Merge Sort: It is based on Divide and Conquer algorithm. It divides the input array into two halves, calls itself for the two halves, and then merges the two sorted halves.
+
+
+
+void merge(int *arr, int start, int end){
+	int mid=(start+end)/2;
+	int i=start;
+	int j=mid+1;
+	int k=start;
+	int temp[100];
+	while(i<=mid && j<end){
+		if(arr[i] < arr[j])
+			temp[k++]=arr[i++];
+		else
+			temp[k++]=arr[j++];
+		}
+	while(i<=mid){
+			temp[k++]=arr[i++];	
+		}
+	while(j<=end){
+			temp[k++]=arr[j++];	
+		}	
+	for(i=start;i<=end;i++)
+		arr[i]=temp[i];
+    }
+    
+    
+    
+    
+    
+    
+    
+ Counting Sort: It is a sorting technique based on keys between a specific range
+ 
+void count_sort(int arr[],int n){
+    int output[n];
+    int count[10];
+    memset(count, 0, sizeof(count));
+    for (i = 0;i<n;i++)
+        ++count[arr[i]];
+    for (i = 1; i<10;i++)
+        count[i] += count[i - 1];
+    for (i = 0;i<n; ++i) {
+        output[count[arr[i]] - 1] = arr[i];
+        --count[arr[i]];
+    }
+}	
+
+
+
+
+
+
+9. Single Pass (DNF): Given an array arr[] consisting 0s, 1s and 2s. Sorting is required for this special case.
+
+void dnf_sort(int arr[], int n){
+	int low=0;
+	int high=n-1;
+	int mid=0;
+	while(mid<=high){
+		if(arr[mid]==0){
+			swap(arr[mid],arr[low]);
+			low++;
+			mid++;
+		}
+		if(arr[mid]==1)
+			mid++;
+		if(arr[mid]==2){
+			swap(arr[mid],arr[high]);
+			high--;
+		}
+	}
+}	
+
+
+7. Bucket Sort: Bucket sort, or bin sort, is a sorting algorithm that works by distributing the elements of an array into a number of buckets.
+image
+
+void bucket_sort(int arr[], int n){
+    vector<int> a[101];
+    for (int i = 0; i < n; i++) {
+        int a[i] = n * arr[i]; 
+        a[a[i]].push_back(arr[i]);
+    }
+	
+	for(int i=100;i>=0;i--){
+		for(auto it:a)
+			cout<<it<<" ";
+	}	
+}
+    
+    
+    
+    

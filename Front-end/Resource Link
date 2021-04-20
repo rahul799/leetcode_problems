@@ -1,0 +1,88 @@
+https://leetcode.com/discuss/interview-question/1147927/useful-front-end-preparation-material
+
+
+
+
+If you find this post helpful, kindly upvote it this gives me motivation to write. Thanks a lot everyone!!
+
+Hi Everyone,
+I have interviewed for Front end roles at Facebook, Amazon, and few other non-fang companies. I just wanted to share some resources as I know how hard it is to find useful resources for front-end preparation.
+At the end of this post, I'll list down some resources shared by FANG recruiters for preparation. 😊
+
+First and the most important thing:-
+
+Get really comfortable with vanilla JS and it's primitives.
+Know how the functions are implemented under the hood.
+Know how to code some of the library(like Lodash, RxJs, etc) implementations from scratch, such as:                         
+* Implementation of debounce
+* Implementation of throttle
+* Implement Observable
+* Implement EvenEmitter
+Know ES6 well.
+Generally asked question covers:-
+
+Explain "this" keyword
+Know how to manipulate DOM API's, querying the structure of a DOM
+Asynchronous programming
+Closures
+Callbacks
+Implementation Promises
+Prototypal inheritance
+Polyfill for Call(), apply() and bind()
+Polyfill for map, filter
+let, const and var
+Some HTML/CSS and javascript mix questions:-
+
+Arrange 3 divs (which share a common parent) in a row.
+Implement sum(a).(b).(c) in Javascript.
+Event loop
+Given a parent and child div (the dimensions of both parent and child are not pre determined). What are the various ways in which child can be aligned to centre of div.
+Web security questions:-
+
+Explain CORS.
+What is CSRF attack? Explain with an example and how to prevent it.
+Explain XSS, etc.
+Don't forget to study DS & Algo as well, though the questions are JS heavy but it's still good to have DS knowledge (I have been asked medium to hard level LC)
+
+I used freecodecamps DS series:
+* https://www.youtube.com/watch?v=Gj5qBheGOEo&list=PLWKjhJtqVAbkso-IbgiiP48n-O-JQA9PJ&ab_channel=freeCodeCamp.org
+
+
+Great resource for JS:-
+https://www.youtube.com/channel/UC3N9i_KvKZYP4F84FPIzgPQ
+https://www.youtube.com/channel/UCO1cgjhGzsSYb1rsB4bFe4Q
+https://www.youtube.com/channel/UCFbNIlppjAuEX4znoulh0Cw
+
+I prepared mostly from the resources provided by recruiters, but this website helped to practise on some variety of problems:
+https://bigfrontend.dev
+
+Zalando and DeliveryHero:-
+General interview questions + medium to hard level leetcode problem
+
+https://www.toptal.com/javascript/interview-questions
+Resources provided by companies:-
+(These are mostly books but I would highly recommend to go through this if you have time. This will strengthen your core understanding of JS which is key to crack the interviews)
+
+The Modern JavaScript Tutorial http://javascript.info/
+JavaScript Garden: http://bonsaiden.github.io/JavaScript-Garden/
+Eloquent JavaScript: http://eloquentjavascript.net/
+https://www.youtube.com/watch?v=N233T0epWTs&ab_channel=FacebookDevelopers
+A re-introduction to JavaScript | MDN: https://developer.mozilla.org/en-US/docs/Web/JavaScript/A_re-introduction_to_JavaScript
+
+
+Practise stuff:-
+https://www.w3resource.com/javascript-exercises/javascript-array-exercises.php#EDITOR
+
+I couldn't find the actual JS quiz by David Shariff, but here is a nice explanation of that quiz:
+https://medium.com/@jesspoemape/explaining-david-shariffs-javascript-quiz-65a8c9ebdc4
+
+Going for Amazon- don't forget to prepare for the 14 leadership priciples (using STAR method)
+
+Bonus:-
+
+Asked to implement searchbar (I used trie)
+Please feel free to add more questions or resources, this can help somebody who is preparing.
+
+
+
+

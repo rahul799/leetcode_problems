@@ -1,0 +1,81 @@
+In an infinite chess board with coordinates from -infinity to +infinity, you have a knight at square [0, 0].
+
+A knight has 8 possible moves it can make, as illustrated below. Each move is two squares in a cardinal direction, then one square in an orthogonal direction.
+
+
+
+Return the minimum number of steps needed to move the knight to the square [x, y].  It is guaranteed the answer exists.
+
+ 
+
+Example 1:
+
+Input: x = 2, y = 1
+Output: 1
+Explanation: [0, 0] → [2, 1]
+Example 2:
+
+Input: x = 5, y = 5
+Output: 4
+Explanation: [0, 0] → [2, 1] → [4, 2] → [3, 4] → [5, 5]
+
+
+
+
+
+
+
+
+
+The problem statement asks us to find minimum number of moves to reach a target position {x,y} on an infinite chessboard from {0,0}. The key point to observe here is that we can reduce this to graph. Each position on the board can be thought of as a node. Edges can be thought of as possible moves for a knight from one position to other. This leads to an undirected uniform weighted graph. Thus the shortest distance to the target position is our answer. Since the graph is undirected and has uniform weights we can use bfs to calculate the answer.
+
+Algorithm:
+
+Start from {0,0}. The distance to {0,0} here is 0. Add this position to queue.
+Keep performing BFS from each point present in the queue. At each step poll a point and explore all 8 possible tiles where the knight can land and add those points to the queue if not visited.
+Thus each point reaches one more hop to the neighbor. And eventually reaches the target node.
+
+The key observation is that we do not need to distinguish x and y, and we don't care whether x and y are positive or negative at all.
+
+
+
+class Solution {
+public:
+    int minKnightMoves(int x, int y) {
+        if(x == 0 && y == 0)
+            return 0;
+        queue<std::pair<int,int>> q;
+        q.push({0,0});
+        std::vector<std::vector<int>> directions = {{1,2},{2,1},{2,-1},{1,-2},{-1,2},{-2,1},{-1,-2},{-2,-1}};
+        int steps = 0;
+        std::unordered_map<int,std::unordered_map<int,bool>> visited;
+        visited[0][0] = true;
+        while(!q.empty())
+        {
+            steps++;
+            int size = q.size();
+            for(int i = 0; i < size;i++)
+            {
+                auto front = q.front();
+                q.pop();
+                for(const auto& dir:directions)
+                {
+                    int nextx = front.first + dir[0];
+                    int nexty = front.second + dir[1];
+                    if(nextx == x && nexty == y)
+                    {
+                        return steps;
+                    }
+                    
+                    // this is an optimisation step!! 
+                    if(!visited[nextx][nexty] && nextx * x >= 0 && nexty * y >= 0)
+                    {
+                        visited[nextx][nexty] = true;
+                        q.push({nextx,nexty});
+                    }
+                }
+            }
+        }
+        return -1;
+    }
+};

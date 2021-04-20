@@ -1,0 +1,30 @@
+
+https://www.interviewbit.com/test/fd151cdfc3/?signature=BAhpA9DEBA%3D%3D--cc3ecbca3524bd1ae4a240efdbac377e17d155dc#/cplus
+
+
+
+
+vector<int> Solution::solve(vector<int> &A, vector<int> &B) {
+    
+    int n = A.size();
+    vector<pair<int, int>> v;
+    for(int i = 0; i < n; i++){
+        if(v.empty() || v.back().first < A[i]) v.push_back({A[i], i});
+    }
+        
+        int q = B.size();
+        vector<int> ans;
+        for(int i = 0; i < q; i++){
+            if(B[i] > v.back().first) ans.push_back(-1);
+            else {
+                pair<int, int> g = {B[i], 0};
+                ans.push_back(lower_bound(v.begin(), v.end(), g)->second);
+                
+            }
+        }
+        return ans;
+        
+    
+    
+    
+}

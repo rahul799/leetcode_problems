@@ -1,0 +1,59 @@
+You work as a system administrator in a dormitory, which has n rooms one after another along a straight hallway. Rooms are numbered from 1 to n.
+
+You have to connect all n rooms to the Internet.
+
+You can connect each room to the Internet directly, the cost of such connection for the i-th room is i coins.
+
+Some rooms also have a spot for a router. The cost of placing a router in the i-th room is also i coins. You cannot place a router in a room which does not have a spot for it. When you place a router in the room i, you connect all rooms with the numbers from max(1, i−k) to min(n, i+k) inclusive to the Internet, where k is the range of router. The value of k is the same for all routers.
+
+Calculate the minimum total cost of connecting all n rooms to the Internet. You can assume that the number of rooms which have a spot for a router is not greater than the number of routers you have.
+
+Input
+The first line of the input contains two integers n and k (1≤n,k≤2⋅105) — the number of rooms and the range of each router.
+
+The second line of the input contains one string s of length n, consisting only of zeros and ones. If the i-th character of the string equals to '1' then there is a spot for a router in the i-th room. If the i-th character of the string equals to '0' then you cannot place a router in the i-th room.
+
+Output
+Print one integer — the minimum total cost of connecting all n rooms to the Internet.
+
+
+
+
+
+#include <bits/stdc++.h>
+
+using namespace std;
+
+int main() {
+#ifdef _DEBUG
+	freopen("input.txt", "r", stdin);
+//	freopen("output.txt", "w", stdout);
+#endif
+	
+	int n, k;
+	cin >> n >> k;
+	string s;
+	cin >> s;
+
+	vector<long long> dp(n + 1);
+	multiset<long long> mins, vals;
+	mins.insert(0);
+	vector<vector<long long>> del(n);
+	for (int i = n - 1; i >= 0; --i) {
+		dp[i] = i + 1 +  dp[i + 1];
+		if (i + k + 2 <= n) mins.erase(mins.find(dp[i + k + 2]));
+		for (auto it : del[i]) vals.erase(vals.find(it));
+		if (!vals.empty()) dp[i] = min(dp[i], *vals.begin());
+		if (s[i] == '1') {
+			long long val = (mins.empty() ? 0 : *mins.begin()) + i + 1;
+			dp[i] = min(dp[i], val);
+			vals.insert(val);
+			if (i - k - 1 >= 0) del[i - k - 1].push_back(val);
+		}
+		mins.insert(dp[i]);
+	}
+	
+	cout << dp[0] << endl;
+	
+	return 0;
+}

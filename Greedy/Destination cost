@@ -1,0 +1,85 @@
+https://www.hackerearth.com/practice/algorithms/greedy/basics-of-greedy-algorithms/practice-problems/algorithm/destination-cost-2b27f15b/editorial/
+
+
+You are given  destinations that must be covered in  days in any order. Any  () destination can be traveled on any  day. There are only two ways to reach any destination 
+and that is by cars or buses. The cost of reaching to the  destination by cars  and buses  are given.
+
+The only constraint is that you cannot use the same way of travel on two consecutive days. Determine the minimum total cost that you need to pay in reaching all  
+destinations.
+
+
+We have to go by car half of the days and remaining of days by bus or vice versa.
+So first, select the minimum from the two given cost on any ith day and adding it to the total cost and adding the index of that to their respective way used.
+If the count of both the ways are same or differ by one, then output the total cost.
+
+else,
+
+Pick the way which has greater count and store the absolute difference of cost at each index.
+
+Sort in ascending order and pick first floor(r/2) elements. (r=difference in the count of the ways).
+
+Add these elements in total cost, then output the total cost.
+
+CODE:
+
+#include<bits/stdc++.h>
+using namespace std;
+
+int main()
+{
+    int n;
+    cin>>n;
+    int c[n],b[n];
+    for(int i=0;i<n;i++)
+    {
+      cin>>c[i];
+    }
+    for(int i=0;i<n;i++)
+    {
+      cin>>b[i];
+    }
+    long long ans=0;
+    vector<int> bus,car;
+    for(int i=0;i<n;i++)
+    {
+      if(b[i]<c[i])
+      {
+        ans+=b[i];
+        bus.push_back(c[i]-b[i]);
+      }
+      else
+      {
+        ans+=c[i];
+        car.push_back(b[i]-c[i]);
+      }
+    }
+    int bus_sz=bus.size(),car_sz=car.size();
+    if(abs(bus_sz-car_sz)<=1)
+    {
+      cout<<ans<<endl;
+    }
+    else
+    {
+      int r=abs(bus_sz-car_sz)/2;
+      if(bus_sz>car_sz)
+      {
+        sort(bus.begin(),bus.end());
+        for(int i=0;i<r;i++)
+        {
+          ans+=bus[i];
+        }
+      }
+      else
+      {
+        sort(car.begin(),car.end());
+        for(int i=0;i<r;i++)
+        {
+          ans+=car[i];
+        }
+      }
+      cout<<ans<<endl;
+    }
+}
+
+ 
+

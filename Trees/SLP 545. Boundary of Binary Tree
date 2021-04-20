@@ -1,0 +1,419 @@
+545. Boundary of Binary Tree
+Medium
+
+522
+
+896
+
+Add to List
+
+Share
+Given a binary tree, return the values of its boundary in anti-clockwise direction starting from root. Boundary includes left boundary, leaves, and right boundary in order without duplicate nodes.  (The values of the nodes may still be duplicates.)
+
+Left boundary is defined as the path from root to the left-most node. Right boundary is defined as the path from root to the right-most node. If the root doesn't have left subtree or right subtree, then the root itself is left boundary or right boundary. Note this definition only applies to the input binary tree, and not applies to any subtrees.
+
+The left-most node is defined as a leaf node you could reach when you always firstly travel to the left subtree if exists. If not, travel to the right subtree. Repeat until you reach a leaf node.
+
+The right-most node is also defined by the same way with left and right exchanged.
+
+Example 1
+
+Input:
+  1
+   \
+    2
+   / \
+  3   4
+
+Ouput:
+[1, 3, 4, 2]
+
+Explanation:
+The root doesn't have left subtree, so the root itself is left boundary.
+The leaves are node 3 and 4.
+The right boundary are node 1,2,4. Note the anti-clockwise direction means you should output reversed right boundary.
+So order them in anti-clockwise without duplicates and we have [1,3,4,2].
+ 
+
+Example 2
+
+Input:
+    ____1_____
+   /          \
+  2            3
+ / \          / 
+4   5        6   
+   / \      / \
+  7   8    9  10  
+       
+Ouput:
+[1,2,4,7,8,9,10,6,3]
+
+Explanation:
+The left boundary are node 1,2,4. (4 is the left-most node according to definition)
+The leaves are node 4,7,8,9,10.
+The right boundary are node 1,3,6,10. (10 is the right-most node).
+So order them in anti-clockwise without duplicate nodes we have [1,2,4,7,8,9,10,6,3].
+
+
+
+
+- left boundary, left leaves, right leaves, right boundary
+
+I just checked a node is left most or right most.
+
+If it is the left most or the leaf node, add to result using the preorder.
+If it is the right most and not the leaf node, add to result using the postorder.
+
+
+
+
+
+node.left is left bound if node is left bound;
+node.right could also be left bound if node is left bound && node has no right child;
+Same applys for right bound;
+if node is left bound, add it before 2 child - pre order;
+if node is right bound, add it after 2 child - post order;
+
+
+
+
+Approach:
+
+
+The boundary of tree can be split into 4 parts:
+
+left boudnary (do not count leaves here);
+leaves of left subtree;
+leaves of right subtree;
+right boundary (do not count leaves here).
+
+
+class Solution {
+public:
+     bool isLeaf(TreeNode *root){
+        return root->left == NULL && root->right == NULL;
+    }
+    void rightboundaryandleaves(TreeNode *root, bool is_boundary, vector<int> &res){
+        if (root != NULL) {
+            rightboundaryandleaves(root->left, is_boundary && root->right == NULL, res);
+            rightboundaryandleaves(root->right, is_boundary,res);
+             if (is_boundary || isLeaf(root))
+                res.push_back(root->val);
+        }    
+    }
+
+    void leftboundaryandleaves(TreeNode *root, bool is_boundary, vector<int> &res){
+        if (root != NULL) {
+             if (is_boundary || isLeaf(root))
+               res.push_back(root->val);
+            leftboundaryandleaves(root->left, is_boundary,res);
+            leftboundaryandleaves(root->right, is_boundary && root->left == NULL, res);
+        }
+    }
+    vector<int> boundaryOfBinaryTree(TreeNode* root) {
+        vector<int> res;
+        if (root == NULL)
+           return {};
+        if (root)
+            res.push_back(root->val);
+        leftboundaryandleaves(root->left, true, res);
+        rightboundaryandleaves(root->right, true, res);
+        
+        return res;
+    }
+};
+
+
+
+
+
+Let's merely get the nodes from the left boundary, the right boundary, and the leaves, in counter-clockwise order.
+
+To get nodes from the left boundary, we start from root.left and move left if we can, else right, until we can't move anymore. The right boundary is similar.
+
+To get nodes from the leaves, we DFS until we hit a leaf (until node.left and node.right are both None). We should take care to add to our stack in the order (right, left) so that they are popped in the order (left, right).
+
+Now armed with all the nodes we could visit, let's visit them in order. As we visit a node, we should skip over ones we've seen before (comparing node objects by pointer, not node.val), and otherwise add node.val to our answer.
+
+
+
+
+
+
+
+
+// https://leetcode.com/discuss/interview-question/275467/Uber-or-Phone-screen-or-Boundary-of-the-binary-tree
+/* C program for boundary traversal 
+of a binary tree */
+
+#include <stdio.h> 
+#include <stdlib.h> 
+
+/* A binary tree node has data, pointer to left child 
+and a pointer to right child */
+struct node { 
+	int data; 
+	struct node *left, *right; 
+}; 
+
+// A simple function to print leaf nodes of a binary tree 
+void printLeaves(struct node* root) 
+{ 
+	if (root == NULL) 
+		return; 
+
+	printLeaves(root->left); 
+
+	// Print it if it is a leaf node 
+	if (!(root->left) && !(root->right)) 
+		printf("%d ", root->data); 
+
+	printLeaves(root->right); 
+} 
+
+// A function to print all left boundary nodes, except a leaf node. 
+// Print the nodes in TOP DOWN manner 
+void printBoundaryLeft(struct node* root) 
+{ 
+	if (root == NULL) 
+		return; 
+
+	if (root->left) { 
+
+		// to ensure top down order, print the node 
+		// before calling itself for left subtree 
+		printf("%d ", root->data); 
+		printBoundaryLeft(root->left); 
+	} 
+	else if (root->right) { 
+		printf("%d ", root->data); 
+		printBoundaryLeft(root->right); 
+	} 
+	// do nothing if it is a leaf node, this way we avoid 
+	// duplicates in output 
+} 
+
+// A function to print all right boundary nodes, except a leaf node 
+// Print the nodes in BOTTOM UP manner 
+void printBoundaryRight(struct node* root) 
+{ 
+	if (root == NULL) 
+		return; 
+
+	if (root->right) { 
+		// to ensure bottom up order, first call for right 
+		// subtree, then print this node 
+		printBoundaryRight(root->right); 
+		printf("%d ", root->data); 
+	} 
+	else if (root->left) { 
+		printBoundaryRight(root->left); 
+		printf("%d ", root->data); 
+	} 
+	// do nothing if it is a leaf node, this way we avoid 
+	// duplicates in output 
+} 
+
+// A function to do boundary traversal of a given binary tree 
+void printBoundary(struct node* root) 
+{ 
+	if (root == NULL) 
+		return; 
+
+	printf("%d ", root->data); 
+
+	// Print the left boundary in top-down manner. 
+	printBoundaryLeft(root->left); 
+
+	// Print all leaf nodes 
+	printLeaves(root->left); 
+	printLeaves(root->right); 
+
+	// Print the right boundary in bottom-up manner 
+	printBoundaryRight(root->right); 
+} 
+
+// A utility function to create a node 
+struct node* newNode(int data) 
+{ 
+	struct node* temp = (struct node*)malloc(sizeof(struct node)); 
+
+	temp->data = data; 
+	temp->left = temp->right = NULL; 
+
+	return temp; 
+} 
+
+// Driver program to test above functions 
+int main() 
+{ 
+	// Let us construct the tree given in the above diagram 
+	struct node* root = newNode(20); 
+	root->left = newNode(8); 
+	root->left->left = newNode(4); 
+	root->left->right = newNode(12); 
+	root->left->right->left = newNode(10); 
+	root->left->right->right = newNode(14); 
+	root->right = newNode(22); 
+	root->right->right = newNode(25); 
+
+	printBoundary(root); 
+
+	return 0; 
+} 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+A leaf node that is neither left or right bound belongs to the bottom line;
+C++
+
+class Solution {
+public:
+    vector<int> boundaryOfBinaryTree(TreeNode* root) {
+        vector<int> bounds;
+        if (root) {
+            bounds.push_back(root->val);
+            getBounds(root->left, bounds, true, false);
+            getBounds(root->right, bounds, false, true);
+        }
+        return bounds;
+    }
+
+private:
+    void getBounds(TreeNode* node, vector<int>& res, bool lb, bool rb) {
+        if (!node)  return;
+        if (lb) res.push_back(node->val);
+        if (!lb && !rb && !node->left && !node->right)  res.push_back(node->val);
+        getBounds(node->left, res, lb, rb && !node->right);
+        getBounds(node->right, res, lb && !node->left, rb);
+        if (rb) res.push_back(node->val);
+    }
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Approach 3 :
+
+
+
+typedef vector<TreeNode*> nodes;
+#define all(v) (v).begin(),(v).end()
+
+class Solution {
+public:
+  // boundary nodes & leaves
+  vector<int> left_boundaries = {};
+  vector<int> right_boundaries = {};
+  vector<int> left_leaves = {};
+  vector<int> right_leaves = {};
+  
+  vector<int> lefts = {};
+  vector<int> rights = {};
+  
+  vector<int> boundaryOfBinaryTree(TreeNode* root) {
+    if (!root) return {};
+    
+    lefts.push_back(root->val);
+    l_traverse(root->left, true);
+    r_traverse(root->right, true);
+    
+    reverse(all(rights));
+    // lefts + reverse(rights) for anti-clockwise direction
+    copy(all(rights), back_inserter(lefts));
+    return lefts;
+  }
+  
+  void l_traverse(TreeNode* node, bool is_boundary) {
+    if (!node) return;
+    
+    if (is_boundary) {
+      lefts.push_back(node->val);
+      if (node->left) {
+        l_traverse(node->left, true);
+        l_traverse(node->right, false);
+      } else {
+        l_traverse(node->right, true);
+      }
+    } else {
+      if (isLeef(node)) lefts.push_back(node->val);
+      l_traverse(node->left, false);
+      l_traverse(node->right, false);
+    }
+  }
+  
+  void r_traverse(TreeNode* node, bool is_boundary) {
+    if (!node) return;
+    
+    cout << node->val << endl;
+    if (is_boundary) {
+      rights.push_back(node->val);
+      if (node->right) {
+        r_traverse(node->right, true);
+        r_traverse(node->left, false);
+      } else {
+        r_traverse(node->left, true);
+      }
+    } else {
+      if (isLeef(node)) rights.push_back(node->val);
+      r_traverse(node->right, false);
+      r_traverse(node->left, false);
+    }
+  }
+  
+  bool isLeef(TreeNode* node) {
+    return (!node->left && !node->right);
+  }
+};

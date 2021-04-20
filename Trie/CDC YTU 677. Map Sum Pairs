@@ -1,0 +1,282 @@
+677. Map Sum Pairs
+Medium
+
+617
+
+93
+
+Add to List
+
+Share
+Implement the MapSum class:
+
+MapSum() Initializes the MapSum object.
+void insert(String key, int val) Inserts the key-val pair into the map. If the key already existed, the original key-value pair will be overridden to the new 
+one.
+int sum(string prefix) Returns the sum of all the pairs' value whose key starts with the prefix.
+
+
+
+Input
+["MapSum", "insert", "sum", "insert", "sum"]
+[[], ["apple", 3], ["ap"], ["app", 2], ["ap"]]
+Output
+[null, null, 3, null, 5]
+
+Explanation
+MapSum mapSum = new MapSum();
+mapSum.insert("apple", 3);  
+mapSum.sum("ap");           // return 3 (apple = 3)
+mapSum.insert("app", 2);    
+mapSum.sum("ap");           // return 5 (apple + app = 3 + 2 = 5)
+
+
+
+1 <= key.length, prefix.length <= 50
+key and prefix consist of only lowercase English letters.
+1 <= val <= 1000
+At most 50 calls will be made to insert and sum.
+
+
+
+
+For each key in the map, if that key starts with the given prefix, then add it to the answer.''
+
+
+class MapSum {
+    HashMap<String, Integer> map;
+    public MapSum() {
+        map = new HashMap<>();
+    }
+    public void insert(String key, int val) {
+        map.put(key, val);
+    }
+    public int sum(String prefix) {
+        int ans = 0;
+        for (String key: map.keySet()) {
+            if (key.startsWith(prefix)) {
+                ans += map.get(key);
+            }
+        }
+        return ans;
+    }
+}
+
+
+
+
+Complexity Analysis**
+
+P is the length of the input prefix.
+
+Space Complexity: The space used by map is linear in the size of all input key and val values combined.
+
+
+
+
+Approach #2: Prefix Hashmap [Accepted]
+
+Intuition and Algorithm
+
+We can remember the answer for all possible prefixes in a HashMap score. When we get a new (key, val) pair, we update every prefix of key appropriately: 
+each prefix will be changed by delta = val - map[key], where map is the previous associated value of key (zero if undefined.)
+
+
+
+
+
+Complexity Analysis
+
+Time Complexity: Every insert operation is 
+O
+(
+K
+2
+)
+O(K 
+2
+ ), where 
+K
+K is the length of the key, as 
+K
+K strings are made of an average length of 
+K
+K. Every sum operation is 
+O
+(
+1
+)
+O(1).
+
+Space Complexity: The space used by map and score is linear in the size of all input key and val values combined.
+
+
+
+
+
+
+This question did not have a single post with a proper explaination of the implementation in C++. So, here it is:
+
+The idea is pretty simple: We want to insert the values in such a way that we can return sum just by traversing the input prefix array.
+
+There are three possibilities for insert(key,val) function:
+1. A new key is inserted: In this case, we insert just like a normal trie and initialise each node with val.
+2. Key doesn't exist but its prefix is present: Here also, we traverse normally and just add val to existing val at each node.
+3. Key exists: In this case, we need to replace the old value with val, so we find new key-old key and add it to all the nodes
+
+Implemenation details:
+
+We wrap our Trie class with a hashmap to make MapSum class. This will help to have a universal map and a universal Trie.
+An important detail is that value is stored at next level so make sure to move to next level and update its value and not current value.
+Refer code comments for more details.
+
+class Trie{
+public: 
+    Trie* character[26];
+    int s;
+    
+    Trie() 
+    {
+        this->s = 0;
+        for( int i = 0 ; i < 26 ; i++)
+            this->character[i]= NULL;          
+    }
+};
+class MapSum {
+public:
+    
+    Trie* myTrie;
+    unordered_map <string, int> map;
+    
+    MapSum() 
+    {
+         myTrie = new Trie(); 
+    }
+    
+    void insert(string key, int val) {
+        
+        
+        int diff = val;
+        
+		//If key is already present we add the difference of old val and new val and not just the new val
+        if(map.find(key) != map.end())
+        {
+            diff -= map[key];
+        }
+         //updates map if val is changed or adds a new pair if absent   
+        map[key] = val;
+        
+        
+        int len = key.length();
+        Trie* currLevel = myTrie;
+        
+      
+        
+        for( int i = 0 ; i < len ; i++)
+        {
+		//If the desired character is absent, we create a new level and add it and the val is added to this new level
+            if(currLevel->character[key[i]-'a'] == NULL ) 
+            {
+                 Trie* newNode = new Trie();
+                 currLevel->character[key[i]-'a'] = newNode;  
+                 currLevel = currLevel->character[key[i]-'a']; 
+                 currLevel->s = diff;  
+            }
+			//If desired character is present, just move to next level and update the value
+            else
+            {   
+                currLevel = currLevel->character[key[i]-'a']; 
+                currLevel->s += diff; 
+            }
+            
+                  
+        }   
+    }
+    
+    int sum(string prefix) {
+        
+        int len = prefix.length();
+        Trie* currLevel = myTrie;
+
+//Simple traversal to reach the last character node and get its value
+        for( int i = 0 ; i < len ; i++)
+        {
+            if(currLevel->character[prefix[i]-'a']== NULL ) 
+               return 0;     
+            currLevel = currLevel->character[prefix[i]-'a'];       
+        }
+        
+        return currLevel->s;
+    }
+};
+
+/**
+ * Your MapSum object will be instantiated and called as such:
+ * MapSum* obj = new MapSum();
+ * obj->insert(key,val);
+ * int param_2 = obj->sum(prefix);
+ */
+
+
+
+
+
+
+
+
+
+
+ struct node{
+        vector<node*> children; 
+        bool isend; 
+        int value ; 
+        node(int v){
+            children.resize(26);
+            isend = false ;
+            value = v ;
+        }
+    };
+    unordered_map<string, int> mp; 
+    node* head = new node(-1); 
+    MapSum() {
+        
+    }
+    
+    void insert(string key, int val) {
+        node* curr = head; 
+        int eval = val ; // effective value 
+        if(mp.find(key) != mp.end()) eval = eval-mp[key]; 
+        for(auto x:key){
+            if(curr->children[x-'a']){
+                curr = curr->children[x-'a']; 
+                curr->value += eval; 
+            }
+            else{
+                curr->children[x-'a'] = new node(val); 
+                curr = curr->children[x-'a']; 
+            }
+        }
+        curr->isend = true ;
+        mp[key] = val; 
+    }
+    int sum(string prefix) {
+        node* curr = head; 
+        for(auto x: prefix ){
+            curr = curr->children[x-'a']; 
+            if (curr == NULL) break; 
+        }
+        if(curr == NULL) return 0 ; 
+        return curr->value; 
+    }
+};
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,199 @@
+Given arrival and departure times of all trains that reach a railway station, the task is to find the minimum number of platforms required for the railway station so that no train waits.
+We are given two arrays which represent arrival and departure times of trains that stop.
+
+
+
+https://www.geeksforgeeks.org/minimum-number-platforms-required-railwaybus-station-set-2-map-based-approach/
+
+https://www.geeksforgeeks.org/minimum-number-platforms-required-railwaybus-station/
+
+
+Examples:
+
+Input: arr[] = {9:00, 9:40, 9:50, 11:00, 15:00, 18:00}
+dep[] = {9:10, 12:00, 11:20, 11:30, 19:00, 20:00}
+Output: 3
+Explantion: There are at-most three trains at a time (time between 11:00 to 11:20)
+
+Input: arr[] = {9:00, 9:40}
+dep[] = {9:10, 12:00}
+Output: 1
+Explantion: Only one platform is needed.
+
+
+
+
+
+
+Two POinter Approach:
+
+
+https://www.geeksforgeeks.org/minimum-number-platforms-required-railwaybus-station/
+
+
+// Program to find minimum number of platforms 
+// required on a railway station 
+#include <algorithm> 
+#include <iostream> 
+
+using namespace std; 
+
+// Returns minimum number of platforms reqquired 
+int findPlatform(int arr[], int dep[], int n) 
+{ 
+	// Sort arrival and departure arrays 
+	sort(arr, arr + n); 
+	sort(dep, dep + n); 
+
+	// plat_needed indicates number of platforms 
+	// needed at a time 
+	int plat_needed = 1, result = 1; 
+	int i = 1, j = 0; 
+
+	// Similar to merge in merge sort to process 
+	// all events in sorted order 
+	while (i < n && j < n) { 
+		// If next event in sorted order is arrival, 
+		// increment count of platforms needed 
+		if (arr[i] <= dep[j]) { 
+			plat_needed++; 
+			i++; 
+		} 
+
+		// Else decrement count of platforms needed 
+		else if (arr[i] > dep[j]) { 
+			plat_needed--; 
+			j++; 
+		} 
+
+		// Update result if needed 
+		if (plat_needed > result) 
+			result = plat_needed; 
+	} 
+
+	return result; 
+} 
+
+// Driver program to test methods of graph class 
+int main() 
+{ 
+	int arr[] = { 900, 940, 950, 1100, 1500, 1800 }; 
+	int dep[] = { 910, 1200, 1120, 1130, 1900, 2000 }; 
+	int n = sizeof(arr) / sizeof(arr[0]); 
+	cout << "Minimum Number of Platforms Required = "
+		<< findPlatform(arr, dep, n); 
+	return 0; 
+} 
+
+
+
+
+Approach 2: Using Map
+
+
+// Program to find minimum number of platforms 
+// required on a railway station 
+#include <bits/stdc++.h> 
+using namespace std; 
+
+int findPlatform(int arr[], int dep[], int n) 
+{ 
+	// Insert all the times (arr. and dep.) 
+	// in the multimap. 
+	multimap<int, char> order; 
+	for (int i = 0; i < n; i++) { 
+
+		// If its arrival then second value 
+		// of pair is 'a' else 'd' 
+		order.insert(make_pair(arr[i], 'a')); 
+		order.insert(make_pair(dep[i], 'd')); 
+	} 
+
+	int result = 0; 
+	int plat_needed = 0; 
+
+	multimap<int, char>::iterator it = order.begin(); 
+
+	// Start iterating the multimap. 
+	for (; it != order.end(); it++) { 
+
+		// If its 'a' then add 1 to plat_needed 
+		// else minus 1 from plat_needed. 
+		if ((*it).second == 'a') 
+			plat_needed++; 
+		else
+			plat_needed--; 
+
+		if (plat_needed > result) 
+			result = plat_needed; 
+	} 
+	return result; 
+} 
+
+// Driver code 
+int main() 
+{ 
+	int arr[] = { 900, 940, 950, 1100, 1500, 1800 }; 
+	int dep[] = { 910, 1200, 1120, 1130, 1900, 2000 }; 
+	int n = sizeof(arr) / sizeof(arr[0]); 
+	cout << "Minimum Number of Platforms Required = "
+		<< findPlatform(arr, dep, n); 
+	return 0; 
+} 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// Program to find minimum number of platforms 
+// required on a railway station 
+#include <bits/stdc++.h> 
+using namespace std; 
+
+int minPlatform(int arrival[], int departure[], int n) 
+{ 
+
+	// as time range from 0 to 2359 in 24 hour clock, 
+	// we declare an array for values from 0 to 2360 
+	int platform[2361] = {}; 
+	int requiredPlatform = 1; 
+	for (int i = 0; i < n; i++) { 
+
+		// increment the platforms for arrival 
+		++platform[arrival[i]]; 
+
+		// once train departs we decrease the platform count 
+		--platform[departure[i] + 1]; 
+	} 
+
+	// We are running loop till 2361 because maximum time value 
+	// in a day can be 23:60 
+	for (int i = 1; i < 2361; i++) { 
+
+		// taking cumulative sum of platform give us required 
+		// number of platform fro every minute 
+		platform[i] = platform[i] + platform[i - 1]; 
+		requiredPlatform = max(requiredPlatform, platform[i]); 
+	} 
+	return requiredPlatform; 
+} 
+
+// Driver code 
+int main() 
+{ 
+	int arr[] = { 900, 940, 950, 1100, 1500, 1800 }; 
+	int dep[] = { 910, 1200, 1120, 1130, 1900, 2000 }; 
+	int n = sizeof(arr) / sizeof(arr[0]); 
+	cout << "Minimum Number of Platforms Required = "
+		<< minPlatform(arr, dep, n); 
+	return 0; 
+} 

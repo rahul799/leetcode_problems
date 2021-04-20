@@ -1,0 +1,54 @@
+The word game begins with your manager writing a string, and a number K on the board.
+You and your teammates must find a substring of size K such that there is exactly one character that is repeated once.
+In other words, there should be K - 1 distinct characters in the substring.
+
+Write an algorithm to help your teammates find the correct answer. If no such substring can be found, return an empty list;
+If multiple such substrings exit, return all of them, without repetitions. The order in which the substrings are returned does not matter.
+
+Input: it has two arguments:
+
+inputString: representing the string written by the manager.
+num: an integer representing the number K, written by the manager on the board
+
+
+
+#include <bits/stdc++.h>
+using namespace std;
+
+void solve(string s, int k)
+{
+    if(s.size() < k) return;
+    map<char, int>mp; //to store the frequency
+    
+    // store the first k frequecy
+    for(int i = 0; i < k; i++)
+    {
+        mp[s[i]]++;
+    }
+    if(mp.size() == (k-1)) {        //if string "abcda" then map size will be 4 
+        for(int i = 0; i < k; i++) cout<<s[i];
+    }
+    for(int i = 1; i <= (s.size() - k); i++)
+    {
+        //shift the window
+        mp[s[i-1]]--;       
+        if(mp[s[i-1]] <= 0) mp.erase(s[i-1]);
+        mp[s[i+k-1]]++;
+
+        //check if string exist
+        if (mp.size() == (k - 1))
+        {
+                for (int j = i; j < i + k; j++)
+                    cout << s[j];
+                cout<<endl;
+        }
+    }
+}
+
+
+int main()
+{
+    string s; cin>>s;
+    int k; cin>>k;
+    solve(s, k);
+}

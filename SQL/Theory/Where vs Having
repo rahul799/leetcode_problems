@@ -1,0 +1,15 @@
+
+
+
+https://www.youtube.com/watch?v=HSVgoaGcpXI&ab_channel=Techtud
+
+
+
+e main difference between WHERE and HAVING clause comes when used together with GROUP BY clause,
+In that case WHERE is used to filter rows before grouping and HAVING is used to exclude records after grouping.
+This is the most important difference and if you remember this, it will help you write better SQL queries. This is also one 
+of the important SQL concepts to understand, not just from an interview perspective but also from a day-to-day use perspective.
+I am sure you have used WHERE clause because its one of the most common clauses in SQL along with SELECT and used to specify 
+filtering criterion or condition. You can even use WHERE clause without HAVING or GROUP BY, as you have seen it many times.
+
+Read more: https://www.java67.com/2019/06/difference-between-where-and-having-in-sql.html#ixzz6jp33NUTq

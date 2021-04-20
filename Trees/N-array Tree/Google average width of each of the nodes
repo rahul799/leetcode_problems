@@ -1,0 +1,70 @@
+
+
+
+
+
+https://leetcode.com/discuss/interview-question/1069991/Google-Interview-Question
+
+Given an N-ary Tree, find out the average width of each of the nodes present in that tree.
+Example:
+1
+/ |
+2 3
+/ \ / |
+4 5 6 7
+
+Note: A node can have ‘N’ number of children
+
+Explanation: Consider the above tree, for node 1 , the average width would be the total no. of nodes under that node ie. 7 (including the target node)
+divided by the total number of levels under the parent node (7/3) .
+
+The format of the answer should be: [node number : average width of that node ] that is ,for the given tree the answer is :
+
+[ 1 : 2.3 , 2 : 1.5 , 3 : 1.5 , 4 : 1 , 5 : 1 , 6 : 1 , 7 : 1 ]
+
+Could anyone provide an optmal approach for this problem
+
+
+
+
+A O(n) time and O(height) space solution. If counting the output also, O(n) space.
+
+///< Prompt : Find the average width of each node in a n-ary tree.
+///< Input : a n-ary tree
+///< Output : a vector of vector {{node, avg width}}
+///< Def : Avg width of a node = (totalNumber of nodes in the subtree rooted at "node") / (the number of levels of subtree rooted at "node")
+
+// Definition of tree
+struct Tree {
+	int val;
+	vector<Tree*> child;
+};
+
+vector<int> recur(Tree *root, vector<vector<int>> &ans);
+
+vector<vector<int>> findAvgWidth(Tree *root) {
+	if (root == nullptr)
+		return {};
+	vector<vector<int>> ans;
+	recur(root, ans);
+	return ans;
+}
+
+vector<int> recur(Tree *root, vector<vector<int>> &ans) {
+	if (tree == nullptr)
+		return {0, 0};
+       
+	int totalNodes = 1, totalLevels = 1;        // Num nodes and level with just a single node
+	
+    // Recur for all children
+	for (int i = 0; i < root->child.size(); i++) {
+		vector<int> info = recur(root->child[i], ans);
+		totalNodes += info[0];
+		totalLevels = max(totalLevels, 1 + info[1]);
+	}
+	
+	int currentAverageWidth = totalNodes / totalLevels;
+	ans.push_back({root->val, currentAverageWidth});
+	
+	return {totalNodes, totalLevels};
+}

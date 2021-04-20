@@ -1,0 +1,51 @@
+
+
+
+
+https://www.youtube.com/watch?v=kKEX4P53MyY&list=PLDdcY4olLQk3Z2Gyo3-VN8gvi7DRKK-YY&index=43&ab_channel=CodeLibrary
+
+
+https://www.geeksforgeeks.org/maximum-sum-rectangle-in-a-2d-matrix-dp-27/
+
+
+using namespace std;
+ 
+int kadane(vector<int> a,int n){
+       
+}
+
+
+
+
+int32_t main(){
+ 
+    int t;
+    cin>>t;
+    while(t--){
+        int r,c;
+        cin>>r>>c;
+        vector<vector<int> > mat(r,vector<int>(c));
+        for(int i=0;i<r;i++){
+            for(int j=0;j<c;j++){
+                cin>>mat[i][j];
+            }
+        }
+        int ma = INT_MIN;
+        for(int i=0;i<r;i++){
+            vector<int> ans(c);
+            for(int j=i;j<r;j++){
+                for(int col=0;col<c;col++){
+                    ans[col] += mat[j][col]; 
+                }
+                ma = max(ma,kadane(ans,c)*(j-i+1));
+            }
+        }
+        cout<<ma<<endl;
+ 
+    }
+ 
+ 
+    return 0; 
+ 
+ 
+}

@@ -1,0 +1,157 @@
+
+1209. Remove All Adjacent Duplicates in String II
+Medium
+
+
+
+Share
+Given a string s, a k duplicate removal consists of choosing k adjacent and equal letters from s and removing them causing the left and the right side of the deleted substring to concatenate together.
+We repeatedly make k duplicate removals on s until we no longer can.
+Return the final string after all such duplicate removals have been made.
+It is guaranteed that the answer is unique.
+
+ 
+
+Example 1:
+
+Input: s = "abcd", k = 2
+Output: "abcd"
+Explanation: There's nothing to delete.
+
+
+int main() {
+   
+    string s;
+    int k;
+    int n;
+    cin >> n >> k;
+    cin >> s;
+    
+    stack<pair<char, int>> stk;
+    
+     for (int i = 0; i < s.length(); i++) {
+            if (!stk.empty() && stk.top().first == s[i]) {
+                if (stk.top().second == k - 1) stk.pop();
+                else stk.top().second++;
+            } else {
+                stk.push(make_pair(s[i], 1));
+            }
+        }
+        string res = "";
+        while(!stk.empty()){
+            int count = stk.top().second;
+            while (count > 0) {
+                res = stk.top().first + res;
+                count--;
+            }
+            
+         stk.pop();
+        }
+           
+    
+        cout << res << endl;
+        
+    
+    
+    
+    /* Enter your code here. Read input from STDIN. Print output to STDOUT */   
+    return 0;
+}
+
+
+
+
+
+
+
+
+
+Approach 2: Memoise Count
+If you observe how the count changes in the approach above, you may have an idea to store it for each character. That way, we do not have to start from the beginning each time we remove a substring. This approach will give us linear time complexity, and the trade-off is the extra memory to store counts.
+
+Algorithm
+
+Initialize counts array of size n.
+
+Iterate through the string:
+
+If the current character is the same as the one before, set counts[i] to counts[i - 1] + 1.
+
+Otherwise, set counts[i] to 1.
+If counts[i] equals k, erase last k characters and decrease i by k.
+
+
+string removeDuplicates(string s, int k) {
+    vector<int> count(s.size());
+    for (int i = 0; i < s.size(); ++i) {
+        if (i == 0 || s[i] != s[i - 1]) {
+            count[i] = 1;
+        } else {
+            count[i] = count[i - 1] + 1;
+            if (count[i] == k) {
+                s.erase(i - k + 1, k);
+                i = i - k;
+            }
+        };
+    }
+    return s;
+}
+
+
+Complexity Analysis
+
+Time complexity: \mathcal{O}(n)O(n), where nn is a string length. We process each character in the string once.
+
+Space complexity: \mathcal{O}(n)O(n) to store the count for each character.
+
+
+Approach 3: Stack
+Instead of storing counts for each character, we can use a stack. When a character does not match the previous one, we 
+push 1 to the stack. Otherwise, we increment the count 
+on the top of the stack.
+
+Algorithm
+
+Iterate through the string:
+
+If the current character is the same as the one before, increment the count on the top of the stack.
+
+Otherwise, push 1 to the stack.
+If the count on the top of the stack equals k, erase last k characters and pop from the stack.
+
+Note that, since Integer is immutable in Java, we need to pop the value first, increment it, and then push it back 
+(if it's less than k).
+
+string removeDuplicates(string s, int k) {
+    stack<int> counts;
+    for (int i = 0; i < s.size(); ++i) {
+        if (i == 0 || s[i] != s[i - 1]) {
+            counts.push(1);
+        } else if (++counts.top() == k) {
+            counts.pop();
+            s.erase(i - k + 1, k);
+            i = i - k;
+        }
+    }
+    return s;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,80 @@
+https://leetcode.com/problems/range-sum-query-mutable/discuss/75721/strongly-recommend-for-beginnersclean-C%2B%2B-implementation-with-detailed-explaination
+
+
+
+
+THE KEY POINTS
+
+idx is some index of BIT. r is a position in idx of the last digit 1 (from left to right) in binary notation. tree[idx] is sum of frequencies from index (idx – 2^r + 1) to index idx (look at the Table 1.1 for clarification). We also write that idx is responsible for indexes from (idx - 2^r + 1) to idx (note that responsibility is the key in our algorithm and is the way of manipulating the tree).
+
+FOR EXAMPLE
+
+Suppose we are looking for cumulative frequency of index 13 (for the first 13 elements). In binary notation, 13 is equal to 1101. Accordingly, we will calculate
+
+  c[1101] = tree[1101] + tree[1100] + tree[1000] 
+  
+  
+  
+  
+   num=a1b
+
+-num= (a1b)¯ + 1 = a¯0b¯ + 1
+
+-num = (a1b)¯ + 1 = a¯0b¯ + 1 = a¯0(0…0)¯ + 1 = a¯0(1…1) + 1 = a¯1(0…0) = a¯1b.
+
+
+
+
+
+
+
+
+
+
+
+ class NumArray {
+    private:
+        vector<int> _nums;
+        vector<int> bit;
+        
+        int lower_bit(int i){
+            return i&-i;
+        }
+        
+        int query(int i){
+            i++;
+            int sum=0;
+            while(i>0){
+                sum+=bit[i];
+                i-=lower_bit(i);
+            }
+            return sum;
+        }
+        
+        void add(int i, int val){
+            i++;
+            while(i<bit.size()){
+                bit[i]+=val;
+                i+=lower_bit(i);
+            }
+        }
+        
+    public:
+        NumArray(vector<int> &nums) : _nums(nums) {
+            bit.resize(nums.size()+1);
+            for(int i=0; i<nums.size(); i++){
+                add(i, nums[i]);
+            }
+        }
+    
+        void update(int i, int val) {
+            if(val!=_nums[i]){
+                add(i, val-_nums[i]);
+                _nums[i]=val;
+            }
+        }
+    
+        int sumRange(int i, int j) {
+            return query(j)-query(i-1);
+        }
+    };

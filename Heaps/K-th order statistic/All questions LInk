@@ -1,0 +1,24 @@
+
+
+
+https://leetcode.com/problems/k-th-smallest-prime-fraction/discuss/115819/Summary-of-solutions-for-problems-%22reducible%22-to-LeetCode-378
+
+
+
+474
+fun4LeetCode's avatar
+fun4LeetCode
+15310
+Last Edit: October 24, 2018 4:02 AM
+
+16.7K VIEWS
+
+This post is a quick summary of all common solutions applicable to problems similar to 378. Kth Smallest Element in a Sorted Matrix, where we are given an n x n matrix with each of the rows and columns sorted in ascending order, and need to find the kth smallest element in the matrix.
+
+For your reference, the following is a list of LeetCode problems that can be transformed into problems equivalent to finding the "Kth Smallest Element in a Sorted Matrix" and thus can be solved effectively using the algorithms developed here:
+
+373. Find K Pairs with Smallest Sums
+378. Kth Smallest Element in a Sorted Matrix
+668. Kth Smallest Number in Multiplication Table
+719. Find K-th Smallest Pair Distance
+786. K-th Smallest Prime Fraction

@@ -1,0 +1,76 @@
+
+994. Rotting Oranges
+Medium
+
+
+Share
+In a given grid, each cell can have one of three values:
+
+the value 0 representing an empty cell;
+the value 1 representing a fresh orange;
+the value 2 representing a rotten orange.
+Every minute, any fresh orange that is adjacent (4-directionally) to a rotten orange becomes rotten.
+
+Return the minimum number of minutes that must elapse until no cell has a fresh orange.  If this is impossible, return -1 instead.
+
+
+class Solution {
+struct Test{
+    int x,y,z;
+};
+public:
+    int orangesRotting(vector<vector<int>>& grid) {
+        int numFresh = 0;
+        queue<Test> q;
+        for(int i = 0; i < grid.size(); i++){
+            for(int j = 0; j < grid[0].size(); j++){
+                if(grid[i][j] == 2) q.push({i,j,0});
+                if(grid[i][j] == 1) numFresh++;
+            }
+        }
+        int res = 0;
+        while(!q.empty()){
+            Test pos = q.front();
+            q.pop();
+            int row = pos.x;
+            int col = pos.y;
+            int minute = pos.z;
+            if(row != 0){
+                if(grid[row-1][col] == 1){
+                    q.push({row-1,col,minute + 1});
+                    grid[row-1][col] = 2;
+                    numFresh--;
+                }
+            }
+            if(row != grid.size() - 1){
+                if(grid[row+1][col] == 1){
+                    q.push({row+1,col,minute + 1});
+                    grid[row+1][col] = 2;
+                    numFresh--;
+                }
+            }
+            if(col != 0){
+                if(grid[row][col-1] == 1){
+                    q.push({row,col-1,minute + 1});
+                    grid[row][col-1] = 2;
+                    numFresh--;
+                }
+            }
+            if(col != grid[0].size()-1){
+                if(grid[row][col+1] == 1){
+                    q.push({row,col+1,minute + 1});
+                    grid[row][col+1] = 2;
+                    numFresh--;
+                }
+            }
+            res = minute;
+
+        }
+        if(numFresh == 0){
+            return res;
+        }
+        else{
+            return -1;
+        }
+    }
+};

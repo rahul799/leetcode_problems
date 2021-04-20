@@ -1,0 +1,149 @@
+
+
+https://leetcode.com/discuss/general-discussion/1151183/bits-can-change-the-world-hacks
+
+
+
+
+please upvote if it helps !!
+
+BIT MANIPULATION covers approx 4% of leetcode problems. In this article we will see all about BIT MANIPULATION and some cool bit manipulation tips and tricks.
+
+There are basically 6 type of operators which we can use over bits.
+
+BITWISE AND (&) operator : It is a binary operator. It takes two numbers as an operands. The result of AND is 1 only if both bits are 1. otherwise 0.
+
+BITWISE OR (|) operator : It is a binary operator. It takes two numbers as an operands. The result of OR is 0 only if both bits are 0. otherwise 1.
+
+BITWISE XOR (^) operator : It is a binary operator. It takes two numbers as an operands. The result of XOR is 1 only if two bits are different. otherwise 0.
+
+BITWISE LEFT SHIFT (<<) operator : It is a binary operator. The left shift operator (<<) shifts the first operand the specified number of bits to the left. Excess bits shifted off to the left are discarded. Left shift is equivalent to multiplying the bit pattern with pow(2,k) ( if we are shifting k bits ).
+1 << 1 = 2 = pow(2,1)
+1 << 2 = 4 = pow(2,2)
+1 << 3 = 8 = pow(2,3)
+1 << 4 = 16 = pow(2,4)
+…
+1 << n = pow(2,n)
+
+BITWISE RIGHT SHIFT (>>) operator : It is a binary operator. The right shift operator (>>) shifts the first operand the specified number of bits to the right. Excess bits shifted off to the right are discarded. Right shift is equivalent to dividing the bit pattern with pow(2,k) ( if we are shifting k bits ).
+4 >> 1 = 2
+6 >> 1 = 3
+5 >> 1 = 2
+16 >> 4 = 1
+
+BITWISE NOT (~) operator : It is a unary operator. It takes one number and inverts all bits of it.
+
+NOTE :- The left shift and right shift operators should not be used for negative numbers.
+
+TIPS AND TRICKS :
+
+Multiplication by power of 2.
+Division by power of 2.
+To check number is odd or even?
+Swapping of 2 numbers.
+To check ith bit of a number.
+To flip ith bit of a number.
+To turn on ith bit of a number.
+To turn off ith bit of a number.
+To check if a number is the power of 2 or not.
+Upper case letter to lower case letter.
+Lower case letter to upper case letter.
+To find min(max) of two numbers
+Count all set bits of a Number
+Count leading zeros
+Count trailing zeros
+1. MULTIPLICATION BY POWER OF 2 :-
+
+      num = num << i;  //multiplication by pow(2,i)
+2. DIVISION BY POWER OF 2 :-
+
+      num = num >> i;  //division by pow(2,i)
+3. TO CHECK WHETHER NUMBER IS ODD OR EVEN :-
+
+   	  if((num & 1) == 0)
+      cout << "Even number";  
+      else
+      cout << "Odd number";  
+4. TO SWAP TWO NUMBERS :-
+
+      x = x ^ y; 
+      y = x ^ y; 
+      x = x ^ y; 
+5. TO CHECK ith BIT OF A NUMBER :-
+
+     x = num & (1 << i);
+6. TO FLIP ith BIT OF A NUMBER :-
+
+     x = n ^ (1 << i); 
+7. TO TURN ON ith BIT OF A NUMBER :-
+
+     x = n | (1 << i);
+8. TO CHECK IF A NUMBER IS POWER OF 2 OR NOT :-
+
+     x = n & (n - 1);
+9. TO CONVERT UPPERCASE TO LOWERCASE LETTER :-
+
+     ch = ch | ' '; 
+10. TO CONVERT LOWERCASE LETTER TO UPPERCASE LETTER :-
+
+     ch = ch & '_'; 
+11. TO FIND MIN MAX OF TWO NUMBERS :-
+
+     minimum = y ^ ((x ^ y) & -(x < y)); // min(x, y) 
+
+     maximum = x ^ ((x ^ y) & -(x < y)); // max(x, y) 
+12. TO COUNT ALL SET BITS OF AN NUMBER :-
+
+       int count = 0;
+       while (n) {
+           n &= (n - 1);
+           count++;
+       }
+       return count;
+   	
+   	//or
+   	
+      cout<< __builtin_popcount(n) ; 
+13. TO COUNT LEADING ZEROS :-
+
+      int total_bits = sizeof(x) * 8;
+   int res = 0;
+   while ( !(x & (1 << (total_bits - 1))) )
+   {
+       x = (x << 1);
+       res++;
+   }
+ 
+   return res;
+   
+   // or
+   
+   builtin_clz (x)
+14. TO COUNT TRAILING ZEROS :-
+
+   int count = 0;
+   while ((x & 1) == 0)
+  {
+       x = x >> 1;
+       count++;
+  }
+  return count;
+   
+   // or
+   
+   builtin_ctz (x)
+MOSTLY ASKED BIT MANIPULATION PROBLEMS :- (Follow the order)
+
+1178. Number of Valid Words for Each Puzzle
+78. Subsets
+169. Majority Element
+1239. Maximum Length of a Concatenated String with Unique Characters
+393. UTF-8 Validation
+187. Repeated DNA Sequences
+1611. Minimum One Bit Operations to Make Integers Zero
+371. Sum of Two Integers
+268. Missing Number
+1290. Convert Binary Number in a Linked List to Integer
+
+
+

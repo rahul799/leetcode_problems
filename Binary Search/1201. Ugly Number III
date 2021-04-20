@@ -1,0 +1,72 @@
+1201. Ugly Number III
+Medium
+
+323
+
+249
+
+Add to List
+
+Share
+Write a program to find the n-th ugly number.
+
+Ugly numbers are positive integers which are divisible by a or b or c.
+
+ 
+
+Example 1:
+
+Input: n = 3, a = 2, b = 3, c = 5
+Output: 4
+Explanation: The ugly numbers are 2, 3, 4, 5, 6, 8, 9, 10... The 3rd is 4.
+Example 2:
+
+Input: n = 4, a = 2, b = 3, c = 4
+Output: 6
+Explanation: The ugly numbers are 2, 3, 4, 6, 8, 9, 10, 12... The 4th is 6.
+Example 3:
+
+Input: n = 5, a = 2, b = 11, c = 13
+Output: 10
+Explanation: The ugly numbers are 2, 4, 6, 8, 10, 11, 12, 13... The 5th is 10.
+Example 4:
+
+Input: n = 1000000000, a = 2, b = 217983653, c = 336916467
+Output: 1999999984
+ 
+
+Constraints:
+
+1 <= n, a, b, c <= 10^9
+1 <= a * b * c <= 10^18
+It's guaranteed that the result will be in range [1, 2 * 10^9]
+
+
+
+
+
+(N) = a + b + c - a ∩ c - a ∩ b - b ∩ c + a ∩ b ∩ c
+F(N) = N/a + N/b + N/c - N/lcm(a, c) - N/lcm(a, b) - N/lcm(b, c) + N/lcm(a, b, c)(lcm = least common multiple)
+Find the least integer N that satisfies the condition F(N) >= K
+
+class Solution {
+public:    
+   int nthUglyNumber(int k, int A, int B, int C) {
+        int lo = 1, hi = 2 * (int) 1e9;
+        long a = long(A), b = long(B), c = long(C);
+        long ab = a * b / __gcd(a, b);
+        long bc = b * c / __gcd(b, c);
+        long ac = a * c / __gcd(a, c);
+        long abc = a * bc / __gcd(a, bc);
+        while(lo < hi) {
+            int mid = lo + (hi - lo)/2;
+            int cnt = mid/a + mid/b + mid/c - mid/ab - mid/bc - mid/ac + mid/abc;
+            if(cnt < k) 
+                lo = mid + 1;
+            else
+			   //the condition: F(N) >= k
+                hi = mid;
+        }
+        return lo;
+    }
+};

@@ -1,0 +1,22 @@
+
+
+We use two techniques to improve the run-time complexity: path compression, and union-by-rank.
+
+Path compression involves changing the x = parent[x] in the find function to parent[x] = find(parent[x]). Basically, as we compute the correct leader for x, we should remember our calculation.
+
+Union-by-rank involves distributing the workload of find across leaders evenly. Whenever we dsu.union(x, y), we have two leaders xr, yr and we have to choose whether we want parent[x] = yr or
+parent[y] = xr. We choose the leader that has a higher following to pick up a new follower.
+Specifically, the meaning of rank is that there are less than 2 ^ rank[x] followers of x. This strategy can be shown to give us better bounds for how long the recursive loop in 
+dsu.find could run for.
+
+
+
+Time Complexity: O(A \log A)O(AlogA), where A = \sum a_iA=∑a 
+i
+​	
+ , and a_ia 
+i
+​	
+  is the length of accounts[i]. If we used union-by-rank, this complexity improves to O(A \alpha(A)) \approx O(A)O(Aα(A))≈O(A), where \alphaα is the Inverse-Ackermann function.
+
+Space Complexity: O(A)O(A), the space used by our DSU structure

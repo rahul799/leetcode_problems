@@ -1,0 +1,53 @@
+
+
+
+"For each point pi, calculate the slope of each line it forms with all other points with greater indices, i.e. pi+1, pi+2, ..., and use a 
+map to record how many lines have the same slope (If two lines have the same slope and share a common point, then the two lines must be the 
+
+same one). By doing so, you can easily find how many points are on the same line that ends at pi in O(n). Thus the amortized running time of 
+the whole algorithm is O(n^2)."
+
+In order to avoid using double type(the slope k) as map key, I used pair (int a, int b) as the key where a=pj.x-pi.x, b=pj.y-pi.y, and k=b/a.
+Using greatest common divider of a and b to divide both a, b ensures that lines with same slope have the same key.
+
+I also handled two special cases: (1) when two points are on a vertical line (2) when two points are the same.
+
+
+class Solution {
+public:
+    int maxPoints(vector<vector<int>>& points) {
+        if (points.size() < 3)
+            return points.size();
+        
+        int res = 0;
+        
+        for (int i = 0; i < points.size(); ++i) {
+            map<pair<int, int>, int> record;
+            int same_count = 0, vertical_count = 0, tmp_res = 0;
+            for (int j = i + 1; j < points.size(); ++j) {
+                if (points[i][0] == points[j][0] && points[i][1] == points[j][1]) {
+                    same_count += 1;
+                } else if (points[i][1] == points[j][1]) {
+                    vertical_count += 1;
+                } else {
+                    int dif1 = points[i][0] - points[j][0];
+                    int dif2 = points[i][1] - points[j][1];
+                    
+                    int common_divider = GCD(dif1, dif2);
+                    record[{dif1/common_divider, dif2/common_divider}] += 1;
+                    tmp_res = max(tmp_res, record[{dif1/common_divider, dif2/common_divider}]);
+                }
+            }
+            tmp_res = max(tmp_res, vertical_count);
+            res = max(res, tmp_res + same_count + 1);
+        }
+        
+        return res;
+    }
+    
+    int GCD(int a, int b) {
+        if (b == 0)
+            return a;
+        return GCD(b, a%b);
+    }
+};

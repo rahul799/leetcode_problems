@@ -1,0 +1,129 @@
+Given an array nums, there is a sliding window of size k which is moving from the very left of the array to the very right. You can only see the k numbers in the window. Each time the sliding window moves right by one position. Return the max sliding window.
+
+Follow up:
+Could you solve it in linear time?
+
+Example:
+
+Input: nums = [1,3,-1,-3,5,3,6,7], and k = 3
+Output: [3,3,5,5,6,7] 
+Explanation: 
+
+Window position                Max
+---------------               -----
+[1  3  -1] -3  5  3  6  7       3
+ 1 [3  -1  -3] 5  3  6  7       3
+ 1  3 [-1  -3  5] 3  6  7       5
+ 1  3  -1 [-3  5  3] 6  7       5
+ 1  3  -1  -3 [5  3  6] 7       6
+ 1  3  -1  -3  5 [3  6  7]      7
+ 
+
+Constraints:
+
+1 <= nums.length <= 10^5
+
+
+
+Intuition
+Use a monotonic deque to store decreasing numbers.
+
+For each new element, we do the following things:
+
+Pop back until the last element in the deque is greater than the current element.
+Pop front if the first element is outdated (out of the window).
+Push back the current element.
+The maximum of each segment is the first element in the deque when that segment is visited.
+
+
+https://binarysearch.com/problems/Mad-Max/editorials/1951564
+
+
+
+
+vector<int> solve(vector<int>& nums, int k) {
+    deque<int> dq;
+    vector<int> ans;
+    for (int i = 0; i < nums.size(); ++i) {
+        while (!dq.empty() && nums[dq.back()] <= nums[i]) dq.pop_back();
+        dq.push_back(i);
+        if (!dq.empty() && i - dq.front() >= k) dq.pop_front();
+        if (i >= k - 1) ans.emplace_back(nums[dq.front()]);
+    }
+    return ans;
+}
+
+
+
+
+
+class Solution {
+public:
+    vector<int> maxSlidingWindow(vector<int>& nums, int k) {
+        deque<int> dq;
+        vector<int> ans;
+        for (int i=0; i<nums.size(); i++) {
+            // we reached window end
+            if (!dq.empty() && dq.front() == i-k) dq.pop_front();
+            while (!dq.empty() && nums[dq.back()] < nums[i])
+                dq.pop_back();
+            dq.push_back(i);
+            // storing the answer when we reach window length
+            if (i>=k-1) ans.push_back(nums[dq.front()]);
+        }
+        return ans;
+    }
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// class Solution {
+// public:
+//     vector<int> maxSlidingWindow(vector<int>& nums, int k) {
+//         int n=nums.size();
+//         //Check for Empty Input
+//         if(n==0 || n<k){
+//             return {};
+//         }
+//         //Here using double ended queue with atmost size equal to k
+//         deque<int> q;
+//         //Result Array Storing the output with size of (n-k+1)
+//         vector<int> ans(n-k+1);
+//         for(int i=0;i<n;i++){
+//             /* Here Idea is that to remove all smaller elements that comes before any
+//                 larger element in present window.
+//                 Here, We are not removing any smaller element that comes after larger element
+// 				because it may become larger element for another window.
+//             */
+//             while(!q.empty() && nums[q.back()]<=nums[i]){
+//                 q.pop_back();
+//             }
+//             // pushing new elements in queue
+//             q.push_back(i);
+//             //Storing Maximum element in result
+//             if(i>=k-1){
+//                 // Here Always larger element will on the front of queue
+//                 ans[i-k+1]=nums[q.front()];
+//                 // if any element is out of the context of current window, remove it
+//                 if(q.front()==i-k+1){
+//                     q.pop_front();
+//                 }
+//             }
+//         }
+//         return ans;
+        
+//     }
+// };
